@@ -1,24 +1,22 @@
 import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 import ContactList from "./components/ContactList/ContactList";
-import css from "./App.module.css";
 import SearchBox from "./components/SearchBox/SearchBox";
 import ContactForm from "./components/ContactForm/ContactForm";
+import css from "./App.module.css";
 
-import { addContactThunk, deleteContactsThunk, getContactsThunk } from './redux/contactsOps';
-import { useEffect } from 'react';
+import { addContactThunk, deleteContactsThunk, fetchContacts } from './redux/contactsOps';
 import { setFilter } from './redux/contactsSlice';
 
 function App() {
-  const contacts = useSelector((state) => state.contacts.items)
+  const contacts = useSelector((state) => state.contacts.items);
   const filter = useSelector((state) => state.contacts.filter);
-  const isLoading = useSelector((state) => state.contacts.isLoading)
+  const isLoading = useSelector((state) => state.contacts.isLoading);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getContactsThunk())
-  }, [dispatch])
- 
-  
+    dispatch(fetchContacts());  // Використання правильного імені операції
+  }, [dispatch]);
 
   const handleAddContact = (newContact) => {
     dispatch(addContactThunk(newContact));
