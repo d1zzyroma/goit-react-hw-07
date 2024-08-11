@@ -3,19 +3,29 @@ import ContactList from "./components/ContactList/ContactList";
 import css from "./App.module.css";
 import SearchBox from "./components/SearchBox/SearchBox";
 import ContactForm from "./components/ContactForm/ContactForm";
-import { setFilter, addContact, deleteContact } from './redux/contactsSlice';
+
+import { addContactThunk, deleteContactsThunk, getContactsThunk } from './redux/contactsOps';
+import { useEffect } from 'react';
+import { setFilter } from './redux/contactsSlice';
 
 function App() {
-  const dispatch = useDispatch();
-  const contacts = useSelector((state) => state.contacts.items);
+  const contacts = useSelector((state) => state.contacts.items)
   const filter = useSelector((state) => state.contacts.filter);
+  const isLoading = useSelector((state) => state.contacts.isLoading)
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getContactsThunk())
+  }, [dispatch])
+ 
+  
 
   const handleAddContact = (newContact) => {
-    dispatch(addContact(newContact));
+    dispatch(addContactThunk(newContact));
   };
 
   const handleDeleteContact = (id) => {
-    dispatch(deleteContact(id));
+    dispatch(deleteContactsThunk(id));
   };
 
   const handleSetFilter = (value) => {
@@ -31,6 +41,7 @@ function App() {
   return (
     <div className={css.container}>
       <h1>Phonebook</h1>
+      {isLoading && <h1>LOADING......</h1>}
       <ContactForm addContact={handleAddContact} />
       <SearchBox 
         inputValue={filter} 

@@ -1,14 +1,14 @@
 import { useDispatch } from "react-redux";
-import { deleteContact } from "../../redux/contactsSlice"; 
 import man from "./man.svg";
 import phone from "./phone.svg";
 import css from "./Contact.module.css";
+import { deleteContactsThunk } from "../../redux/contactsOps";
 
 const Contact = ({ name, phoneNumber, id }) => {
   const dispatch = useDispatch();
 
   const handleDelete = () => {
-    dispatch(deleteContact(id));
+    dispatch(deleteContactsThunk(id));
   };
 
   return (
